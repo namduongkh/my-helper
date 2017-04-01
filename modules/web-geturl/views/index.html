@@ -1,6 +1,20 @@
-<div id="index">
-    <div class="form-group">
-        <label for="url">Url</label>
-        <input type="text" name="url" id="url" />
+<div id="index" ng-controller="GetUrlController as getUrl">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label for="url">Url</label>
+                <input type="text" name="url" data-ng-model="getUrl.url" class="form-control" placeholder="http://example.com" />
+            </div>
+            <button type="button" ng-click="getUrl.getImage()" class="btn btn-primary">Get image</button>
+            <button type="button" ng-click="getUrl.changeShowHtml()" class="btn btn-primary" ng-if="getUrl.html">Show html: {[{getUrl.showHtml}]}</button>
+            <button type="button" ngclipboard data-clipboard-target="#get-image-html" class="btn btn-primary" ng-if="getUrl.showHtml">Copy html</button>
+        </div>
+    </div>
+    <div class="row" ng-if="getUrl.html">
+        <div class="col-sm-12">
+            <h3>Tiêu đề: {[{getUrl.title}]}</h3>
+            <div class="get-image" ng-bind-html="getUrl.html" ng-if="!getUrl.showHtml"></div>
+            <div class="get-image" ng-bind="getUrl.html" ng-if="getUrl.showHtml" id="get-image-html"></div>
+        </div>
     </div>
 </div>

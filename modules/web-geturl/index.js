@@ -11,6 +11,12 @@ exports.register = function(server, options, next) {
         config: Controller.index
     });
 
+    server.route({
+        method: 'POST',
+        path: '/getImage',
+        config: Controller.getImage
+    });
+
     next();
 };
 

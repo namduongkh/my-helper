@@ -11,7 +11,21 @@ global.BASE_PATH = __dirname;
 var assets = {
     js: [
         '/libs/angular/angular.min.js',
-        '/js/app.js'
+        '/template/js/jquery.js',
+        '/template/js/bootstrap.min.js',
+        // '/template/js/plugins/morris/raphael.min.js',
+        // '/template/js/plugins/morris/morris.min.js',
+        // '/template/js/plugins/morris/morris-data.js',
+        '/libs/clipboard/dist/clipboard.min.js',
+        '/libs/ngclipboard/dist/ngclipboard.min.js',
+        '/dist/main.js',
+    ],
+    css: [
+        '/dist/main.css',
+        '/template/css/bootstrap.min.css',
+        '/template/css/sb-admin.css',
+        // '/template/css/plugins/morris.css',
+        '/template/font-awesome/css/font-awesome.min.css',
     ]
 }
 
@@ -37,7 +51,7 @@ server.register(Vision, (err) => {
         helpersPath: global.BASE_PATH + '/helpers',
         context: { assets: assets },
         relativeTo: global.BASE_PATH + '/modules',
-        // partialsPath: global.BASE_PATH + '/app/layouts/partials',
+        partialsPath: global.BASE_PATH + '/layouts/partials',
         layoutPath: global.BASE_PATH + '/layouts',
         layout: true,
         context: {

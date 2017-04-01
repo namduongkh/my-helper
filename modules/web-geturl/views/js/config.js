@@ -2,10 +2,9 @@
     'use strict';
 
     angular
-        .module("app", ["GetUrl", "ngclipboard"])
+        .module("GetUrl", [])
         .config(function($interpolateProvider) {
             $interpolateProvider.startSymbol('{[{');
             $interpolateProvider.endSymbol('}]}');
         });
-
 })();
