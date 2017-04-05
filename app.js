@@ -63,11 +63,28 @@ server.register(Vision, (err) => {
     });
 });
 
+server.register([{
+    register: require('./static.js')
+}, {
+    register: require('./mongo.js')
+}], (err) => {
+    if (err) {
+        server.log(['error', 'server'], err);
+    }
+});
+
 // server.register(require(Path.resolve("./route.js")), {}, (err) => {
 //     if (err) {
 //         server.log(['error', 'server'], err);
 //     }
 // });
+
+
+let models = Glob.sync(BASE_PATH + "/modules/*/model/*.js", {});
+models.forEach((item) => {
+    // console.log("Model", item);
+    require(Path.resolve(item));
+});
 
 let modules = [];
 let modulesName = Glob.sync(BASE_PATH + "/modules/*/index.js", {});
@@ -81,13 +98,6 @@ server.register(modules, (err) => {
     }
 });
 
-server.register([{
-    register: require('./static.js')
-}], (err) => {
-    if (err) {
-        server.log(['error', 'server'], err);
-    }
-});
 
 server.register(require('inert'), (err) => {
     if (err) {
