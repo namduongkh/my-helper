@@ -8,6 +8,13 @@ var db = {
         pass: ''
     }
 };
+// var db = {
+//     uri: 'mongodb://root:1@ds043952.mlab.com:43952/task-list',
+//     options: {
+//         user: 'root',
+//         pass: '1'
+//     }
+// };
 
 exports.register = function(server, options, next) {
 
