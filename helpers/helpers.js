@@ -16,6 +16,12 @@ const helpers = {
 
         return JSON.stringify(context);
     },
+    active_menu: function(active_menu, menu) {
+        if (active_menu == menu) {
+            return "active";
+        }
+        return "";
+    },
 };
 
 for (let key in helpers) {

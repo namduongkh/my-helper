@@ -1,0 +1,11 @@
+<div id="jackpot" ng-controller="JackpotController as jackpot">
+    <div class="row">
+        <div class="col-md-12">
+            <span class="winning-item" ng-repeat="item in jackpot.winnings">
+                {[{item.number}]}
+                <span class="diff">{[{item.diff}]}</span>
+            </span>
+            <span class="clear-fix"></span>
+        </div>
+    </div>
+</div>

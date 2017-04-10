@@ -15,7 +15,7 @@ exports.index = {
         //         console.log("p", payload.toString('utf8'));
         //     }
         // });
-        return reply.view("web-geturl/views/index", { meta: { title: 'Index' } });
+        return reply.view("web-geturl/views/index", { meta: { title: 'Index' }, active_menu: 'geturl' });
     }
 };
 
@@ -59,25 +59,25 @@ exports.getImage = {
     }
 };
 
-exports.convertWinning = {
-    handler: function(request, reply) {
-        let winnings = require("./winning.json");
-        _.forEach(winnings, function(item) {
-            let date = new Date(item.date.replace(/(\d+)\/(\d+)\/(\d+)/g, function(str, s1, s2, s3) {
-                return s2 + "/" + s1 + "/" + s3;
-            }));
+// exports.convertWinning = {
+//     handler: function(request, reply) {
+//         let winnings = require("./winning.json");
+//         _.forEach(winnings, function(item) {
+//             let date = new Date(item.date.replace(/(\d+)\/(\d+)\/(\d+)/g, function(str, s1, s2, s3) {
+//                 return s2 + "/" + s1 + "/" + s3;
+//             }));
 
-            let numbers = item.winning.split(",");
-            _.forEach(numbers, function(item, index) {
-                let winning = new Winning({
-                    date: date,
-                    number: Number(item),
-                    position: index
-                });
-                winning.save();
-            });
-            // console.log("Date", date);
-        });
-        reply();
-    }
-};
+//             let numbers = item.winning.split(",");
+//             _.forEach(numbers, function(item, index) {
+//                 let winning = new Winning({
+//                     date: date,
+//                     number: Number(item),
+//                     position: index
+//                 });
+//                 winning.save();
+//             });
+//             // console.log("Date", date);
+//         });
+//         reply();
+//     }
+// };

@@ -3,7 +3,7 @@
     'use strict';
 
     angular
-        .module("app", ["GetUrl", "ngclipboard"])
+        .module("app", ["GetUrl", "Jackpot", "ngclipboard"])
         .config(function($interpolateProvider) {
             $interpolateProvider.startSymbol('{[{');
             $interpolateProvider.endSymbol('}]}');
@@ -15,6 +15,16 @@
 
     angular
         .module("GetUrl", [])
+        .config(function($interpolateProvider) {
+            $interpolateProvider.startSymbol('{[{');
+            $interpolateProvider.endSymbol('}]}');
+        });
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module("Jackpot", [])
         .config(function($interpolateProvider) {
             $interpolateProvider.startSymbol('{[{');
             $interpolateProvider.endSymbol('}]}');
@@ -51,6 +61,30 @@
         getUrl.changeShowHtml = function() {
             getUrl.showHtml = !getUrl.showHtml;
         }
+    }
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module("Jackpot")
+        .controller("JackpotController", JackpotController);
+
+    function JackpotController($http, $sce) {
+        var jackpot = this;
+
+        jackpot.getWinningPosition = function() {
+            $http({
+                    method: 'get',
+                    url: "/api/jackpot/getWinningPosition"
+                })
+                .then(function(resp) {
+                    console.log("Resp", resp);
+                    jackpot.winnings = resp.data
+                });
+        };
+
+        jackpot.getWinningPosition();
     }
 })();
 },{}]},{},[1])

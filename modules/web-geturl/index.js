@@ -17,12 +17,6 @@ exports.register = function(server, options, next) {
         config: Controller.getImage
     });
 
-    server.route({
-        method: 'GET',
-        path: '/convertWinning',
-        config: Controller.convertWinning
-    });
-
     next();
 };
 
