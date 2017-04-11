@@ -72,19 +72,41 @@
 
     function JackpotController($http, $sce) {
         var jackpot = this;
+        jackpot.winnings = [];
 
-        jackpot.getWinningPosition = function() {
+        jackpot.getWinningPosition = function(position) {
             $http({
-                    method: 'get',
-                    url: "/api/jackpot/getWinningPosition"
+                    method: 'post',
+                    url: "/api/jackpot/getWinningPosition",
+                    data: {
+                        position: position
+                    }
                 })
                 .then(function(resp) {
-                    console.log("Resp", resp);
-                    jackpot.winnings = resp.data
+                    // console.log("Resp", resp);
+                    jackpot.winnings[position] = resp.data
                 });
         };
 
-        jackpot.getWinningPosition();
+        jackpot.getWinnings = function() {
+            for (var i = 0; i < 6; i++) {
+                jackpot.getWinningPosition(i);
+            }
+        };
+
+        jackpot.addWinning = function() {
+            $http({
+                    method: 'post',
+                    url: "/api/jackpot/addWinningApi",
+                    data: {
+                        number: jackpot.add_winning.number,
+                        date: jackpot.add_winning.date
+                    }
+                })
+                .then(function(resp) {
+                    console.log("Resp", resp);
+                });
+        };
     }
 })();
 },{}]},{},[1])

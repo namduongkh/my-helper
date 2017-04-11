@@ -5,6 +5,7 @@ const Wreck = require('wreck');
 var fs = require('fs');
 const mongoose = require('mongoose');
 const Winning = mongoose.model('Winning');
+var json2xls = require('json2xls');
 
 exports.convertWinning = {
     handler: function(request, reply) {
@@ -35,23 +36,89 @@ exports.jackpot = {
     }
 };
 
+exports.addWinning = {
+    handler: function(request, reply) {
+        return reply.view("web-jackpot/views/add-winning", { meta: { title: 'Thêm winning' }, active_menu: 'add-winning' });
+    }
+};
+
+exports.addWinningApi = {
+    handler: function(request, reply) {
+        let { number, date } = request.payload;
+        let numbers = number.split(" ");
+        numbers.map(function(item, key) {
+            let options = {
+                number: item,
+                date: new Date(date),
+                position: key
+            };
+            Winning.findOne(options).then(function(winning) {
+                if (winning) {
+                    console.log("Remove");
+                    winning.remove();
+                }
+                new Winning(options).save().then(function() {});
+            });
+        });
+        return reply("Success");
+    }
+};
+
 exports.getWinningPosition = {
     handler: function(request, reply) {
         Winning.find({
-                position: 0
+                position: request.payload.position
             })
             .sort("date")
             .lean()
             .then(function(numbers) {
-                numbers = _.map(numbers, function(item, key) {
+                numbers = _.uniqWith(_.map(numbers, function(item, key) {
+                    item.number = Number(item.number);
                     if (key > 0) {
-                        item.diff = item.number - numbers[key - 1].number;
+                        item.diff = Number(item.number) - Number(numbers[key - 1].number);
                     } else {
                         item.diff = 0;
                     }
                     return item;
+                }), function(a, b) {
+                    if (new Date(a.date).toDateString() == new Date(b.date).toDateString()) {
+                        return a;
+                    }
                 });
                 return reply(numbers);
+            })
+            .catch(function(err) {
+                console.log("Err", err);
+                return reply("Error");
+            });
+    }
+};
+
+exports.getWinningDiff = {
+    handler: function(request, reply) {
+        Winning.find({
+                position: request.query.position
+            })
+            .sort("date")
+            .lean()
+            .then(function(numbers) {
+                numbers = _.uniqWith(_.map(numbers, function(item, key) {
+                    item.number = Number(item.number);
+                    if (key > 0) {
+                        item.diff = Number(item.number) - Number(numbers[key - 1].number);
+                    } else {
+                        item.diff = 0;
+                    }
+                    return item;
+                }), function(a, b) {
+                    if (new Date(a.date).toDateString() == new Date(b.date).toDateString()) {
+                        return a;
+                    }
+                });
+
+                var xls = json2xls(numbers);
+                fs.writeFileSync('public/data.xlsx', xls, 'binary');
+                return reply.file('data.xlsx');
             })
             .catch(function(err) {
                 console.log("Err", err);

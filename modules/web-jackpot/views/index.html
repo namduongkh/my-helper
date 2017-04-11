@@ -1,7 +1,7 @@
-<div id="jackpot" ng-controller="JackpotController as jackpot">
+<div id="jackpot" ng-controller="JackpotController as jackpot" ng-init="jackpot.getWinnings()">
     <div class="row">
-        <div class="col-md-12">
-            <span class="winning-item" ng-repeat="item in jackpot.winnings">
+        <div class="col-md-12" ng-repeat="winnings in jackpot.winnings track by $index" style="border-bottom: 1px solid #ccc; padding: 10px 0">
+            <span class="winning-item" ng-repeat="item in winnings">
                 {[{item.number}]}
                 <span class="diff">{[{item.diff}]}</span>
             </span>
