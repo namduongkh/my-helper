@@ -5,6 +5,42 @@ const Wreck = require('wreck');
 var fs = require('fs');
 const mongoose = require('mongoose');
 const Winning = mongoose.model('Winning');
+const nodemailer = require('nodemailer');
+
+// create reusable transporter object using the default SMTP transport
+let transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'namduong.kh94@gmail.com',
+        pass: 'pDemondcard38'
+    }
+});
+
+exports.publish = {
+    handler: function(request, reply) {
+        let { html, title } = request.payload;
+        // console.log("html", html);
+        // setup email data with unicode symbols
+        let mailOptions = {
+            from: 'namduong.kh94@gmail.com', // sender address
+            // to: 'openness.newthinkingnewlife@gmail.com', // list of receivers
+            to: 'openness.newthinkingnewlife.blog18@blogger.com', // list of receivers
+            subject: title, // Subject line
+            // text: html, // plain text body
+            html: html // html body
+        };
+
+        // send mail with defined transport object
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                return console.log(error);
+            }
+            console.log('Message %s sent: %s', info.messageId, info.response);
+        });
+
+        return reply("Send!");
+    }
+};
 
 exports.index = {
     handler: function(request, reply) {
@@ -29,7 +65,7 @@ exports.getImage = {
                     msg: "Error!"
                 });
             } else {
-                // console.log("p", payload.toString('utf8'));
+                // console.log("Payload", payload.toString('utf8'));
                 let html = payload.toString('utf8');
                 let img = "";
                 let title;

@@ -17,6 +17,12 @@ exports.register = function(server, options, next) {
         config: Controller.getImage
     });
 
+    server.route({
+        method: 'POST',
+        path: '/api/publish',
+        config: Controller.publish
+    });
+
     next();
 };
 

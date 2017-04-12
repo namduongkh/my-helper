@@ -10,6 +10,7 @@ global.BASE_PATH = __dirname;
 
 var assets = {
     js: [
+        '/libs/jquery/dist/jquery.min.js',
         '/libs/angular/angular.min.js',
         '/template/js/jquery.js',
         '/template/js/bootstrap.min.js',

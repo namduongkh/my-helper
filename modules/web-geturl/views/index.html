@@ -8,11 +8,12 @@
             <button type="button" ng-click="getUrl.getImage()" class="btn btn-primary">Get image</button>
             <button type="button" ng-click="getUrl.changeShowHtml()" class="btn btn-primary" ng-if="getUrl.html">Show html: {[{getUrl.showHtml}]}</button>
             <button type="button" ngclipboard data-clipboard-target="#get-image-html" class="btn btn-primary" ng-if="getUrl.showHtml">Copy html</button>
+            <button type="button" ng-click="getUrl.publish()" class="btn btn-primary" ng-if="getUrl.html">Publish</button>
         </div>
     </div>
     <div class="row" ng-if="getUrl.html">
-        <div class="col-sm-12">
-            <h3>Tiêu đề: {[{getUrl.title}]}</h3>
+        <div class="col-sm-12" id="html-result">
+            <h3>Tiêu đề: <input type="text" ng-model="getUrl.title"></h3>
             <div class="get-image" ng-bind-html="getUrl.html" ng-if="!getUrl.showHtml"></div>
             <div class="get-image" ng-bind="getUrl.html" ng-if="getUrl.showHtml" id="get-image-html"></div>
         </div>
