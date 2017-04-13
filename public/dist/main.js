@@ -85,6 +85,19 @@
         };
     }
 })();
+
+
+$(document).ready(function() {
+    var iframeWindow = document.getElementById("iframe").contentWindow;
+
+    iframeWindow.addEventListener("load", function() {
+        var doc = iframe.contentDocument || iframe.contentWindow.document;
+        // var target = doc.getElementById("my-target-id");
+
+        // target.innerHTML = "Found it!";
+        console.log("Doc", doc);
+    });
+});
 (function() {
     'use strict';
 

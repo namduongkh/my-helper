@@ -44,14 +44,13 @@ exports.publish = {
 
 exports.index = {
     handler: function(request, reply) {
-        // Wreck.get('http://thiendia.com/diendan/threads/loan-luan-devoted-with-sister-d2h.1003731/', (err, res, payload) => {
-        //     if (err) {
-        //         console.log("err", err);
-        //     } else {
-        //         console.log("p", payload.toString('utf8'));
-        //     }
-        // });
         return reply.view("web-geturl/views/index", { meta: { title: 'Index' }, active_menu: 'geturl' });
+    }
+};
+
+exports.testIframe = {
+    handler: function(request, reply) {
+        return reply.view("web-geturl/views/test-iframe", { meta: { title: 'Test iframe' }, active_menu: 'testiframe' });
     }
 };
 

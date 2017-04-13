@@ -18,6 +18,12 @@ exports.register = function(server, options, next) {
     });
 
     server.route({
+        method: 'GET',
+        path: '/test-iframe',
+        config: Controller.testIframe
+    });
+
+    server.route({
         method: 'POST',
         path: '/api/publish',
         config: Controller.publish
