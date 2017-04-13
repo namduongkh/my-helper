@@ -12,7 +12,7 @@ let transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
         user: 'namduong.kh94@gmail.com',
-        pass: 'pDemondcard38'
+        pass: 'phongnguyen.94'
     }
 });
 
@@ -54,6 +54,16 @@ exports.testIframe = {
     }
 };
 
+exports.getLink = {
+    handler: function(request, reply) {
+        return reply.view("web-geturl/views/get-link", {
+            meta: { title: 'Get link' },
+            active_menu: 'getlink',
+            view_data: Object.assign({}, request.query)
+        });
+    }
+};
+
 exports.getImage = {
     handler: function(request, reply) {
         Wreck.get(request.payload.url, (err, res, payload) => {
@@ -77,7 +87,7 @@ exports.getImage = {
                                 s1.search('.png') > -1 ||
                                 s1.search('.jpeg') > -1) &&
                             s1.search('http') > -1) {
-                            img += str;
+                            img += "<img src=" + s1 + " alt='Hình ảnh'/>";
                         }
                         return str;
                     });
@@ -86,7 +96,7 @@ exports.getImage = {
                     status: true,
                     content: {
                         image: img,
-                        title: title
+                        title: _.upperFirst(title)
                     }
                 });
             }

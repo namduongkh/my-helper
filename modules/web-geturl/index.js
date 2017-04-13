@@ -29,6 +29,12 @@ exports.register = function(server, options, next) {
         config: Controller.publish
     });
 
+    server.route({
+        method: 'GET',
+        path: '/get-link',
+        config: Controller.getLink
+    });
+
     next();
 };
 

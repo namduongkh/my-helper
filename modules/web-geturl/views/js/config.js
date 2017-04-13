@@ -7,4 +7,10 @@
             $interpolateProvider.startSymbol('{[{');
             $interpolateProvider.endSymbol('}]}');
         });
+    angular
+        .module("GetLink", [])
+        .config(function($interpolateProvider) {
+            $interpolateProvider.startSymbol('{[{');
+            $interpolateProvider.endSymbol('}]}');
+        });
 })();

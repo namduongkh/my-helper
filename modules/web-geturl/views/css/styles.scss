@@ -10,3 +10,21 @@
         height: auto;
     }
 }
+
+.html-content {
+    max-height: 450px;
+    overflow: hidden;
+    overflow-y: scroll;
+    #html-result {
+        img {
+            max-width: 32%;
+            border: 1px solid red;
+            margin: 2px;
+            float: left;
+        }
+    }
+}
+
+.clear-fix {
+    clear: both;
+}

@@ -2,10 +2,9 @@
     'use strict';
 
     angular
-        .module("app", ["GetUrl", "Jackpot", "ngclipboard", "GetLink", "Common"])
+        .module("Common", [])
         .config(function($interpolateProvider) {
             $interpolateProvider.startSymbol('{[{');
             $interpolateProvider.endSymbol('}]}');
         });
-
 })();

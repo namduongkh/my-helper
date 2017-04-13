@@ -3,7 +3,7 @@
     'use strict';
 
     angular
-        .module("app", ["GetUrl", "Jackpot", "ngclipboard"])
+        .module("app", ["GetUrl", "Jackpot", "ngclipboard", "GetLink", "Common"])
         .config(function($interpolateProvider) {
             $interpolateProvider.startSymbol('{[{');
             $interpolateProvider.endSymbol('}]}');
@@ -14,7 +14,23 @@
     'use strict';
 
     angular
+        .module("Common", [])
+        .config(function($interpolateProvider) {
+            $interpolateProvider.startSymbol('{[{');
+            $interpolateProvider.endSymbol('}]}');
+        });
+})();
+(function() {
+    'use strict';
+
+    angular
         .module("GetUrl", [])
+        .config(function($interpolateProvider) {
+            $interpolateProvider.startSymbol('{[{');
+            $interpolateProvider.endSymbol('}]}');
+        });
+    angular
+        .module("GetLink", [])
         .config(function($interpolateProvider) {
             $interpolateProvider.startSymbol('{[{');
             $interpolateProvider.endSymbol('}]}');
@@ -29,6 +45,107 @@
             $interpolateProvider.startSymbol('{[{');
             $interpolateProvider.endSymbol('}]}');
         });
+})();
+(function() {
+    'use strict';
+
+    angular.module("Common")
+        .service("CommonSvc", CommonSvc);
+
+    function CommonSvc() {
+        return {
+            publish_email: [
+                { name: "Blog 18 tuổi", value: "openness.newthinkingnewlife.blog18@blogger.com" }
+            ]
+        };
+    }
+})();
+(function() {
+    'use strict';
+
+    angular.module("GetLink")
+        .controller("GetLinkController", GetLinkController);
+
+    function GetLinkController($scope, $http, $sce, $timeout, CommonSvc) {
+        var getLink = this;
+        getLink.publish_email = CommonSvc.publish_email;
+
+        $scope.$watch('getLink.view_data', function(value) {
+            if (value) {
+                value = JSON.parse(value);
+                if (value.url) {
+                    getLink.url = value.url;
+                    getLink.getAllLink();
+                }
+            }
+        });
+
+        getLink.getAllLink = function() {
+            $http({
+                    method: 'post',
+                    url: "/api/getlink/getAllLink",
+                    data: {
+                        url: getLink.url
+                    }
+                })
+                .then(function(resp) {
+                    if (resp.status == 200) {
+                        if (resp.data.status) {
+                            getLink.allHref = resp.data.href;
+                        }
+                    }
+                })
+                .catch(function(err) {
+                    console.log(err)
+                });
+        };
+
+        getLink.getImage = function(url) {
+            getLink.image_data = {};
+            $http({
+                    method: 'post',
+                    url: "/getImage",
+                    data: {
+                        url: url
+                    }
+                })
+                .then(function(resp) {
+                    if (resp.status == 200) {
+                        if (resp.data.content) {
+                            getLink.image_data = {
+                                image: resp.data.content.image,
+                                title: resp.data.content.title,
+                                html: $sce.trustAsHtml(resp.data.content.image),
+                                publish_email: getLink.publish_email[0].value
+                            };
+                            $timeout(function() {
+                                $("#html-result").find('img').bind('click', function() {
+                                    this.remove();
+                                });
+                            });
+                        }
+                    }
+                });
+        };
+
+        getLink.publish = function(html, email, title) {
+            $http({
+                    method: 'post',
+                    url: "/api/getlink/publish",
+                    data: {
+                        html: html,
+                        email: email,
+                        title: title
+                    }
+                })
+                .then(function(resp) {
+                    if (resp.status == 200) {
+                        alert("Success!");
+                        $('.close-modal').click();
+                    }
+                });
+        };
+    }
 })();
 (function() {
     'use strict';
@@ -87,17 +204,17 @@
 })();
 
 
-$(document).ready(function() {
-    var iframeWindow = document.getElementById("iframe").contentWindow;
+// $(document).ready(function() {
+//     var iframeWindow = document.getElementById("iframe").contentWindow;
 
-    iframeWindow.addEventListener("load", function() {
-        var doc = iframe.contentDocument || iframe.contentWindow.document;
-        // var target = doc.getElementById("my-target-id");
+//     iframeWindow.addEventListener("load", function() {
+//         var doc = iframe.contentDocument || iframe.contentWindow.document;
+//         // var target = doc.getElementById("my-target-id");
 
-        // target.innerHTML = "Found it!";
-        console.log("Doc", doc);
-    });
-});
+//         // target.innerHTML = "Found it!";
+//         console.log("Doc", doc);
+//     });
+// });
 (function() {
     'use strict';
 
