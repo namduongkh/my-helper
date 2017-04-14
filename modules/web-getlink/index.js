@@ -7,6 +7,12 @@ exports.register = function(server, options, next) {
 
     server.route({
         method: 'GET',
+        path: '/',
+        config: Controller.index
+    });
+
+    server.route({
+        method: 'GET',
         path: '/get-image',
         config: Controller.getImage
     });

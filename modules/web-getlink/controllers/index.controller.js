@@ -42,9 +42,19 @@ exports.publish = {
     }
 };
 
+exports.index = {
+    handler: function(request, reply) {
+        return reply.view("web-getlink/views/index", { meta: { title: 'Index' } });
+    }
+};
+
 exports.getImage = {
     handler: function(request, reply) {
-        return reply.view("web-getlink/views/get-image", { meta: { title: 'Get image from link' }, active_menu: 'getimage' });
+        return reply.view("web-getlink/views/get-image", {
+            meta: { title: 'Get image from link' },
+            active_menu: 'getimage',
+            view_data: Object.assign({}, request.query)
+        });
     }
 };
 

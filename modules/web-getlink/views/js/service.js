@@ -13,10 +13,24 @@
                     data: data
                 });
             },
+            publishMany: function(data) {
+                return $http({
+                    method: 'post',
+                    url: "/api/getlink/publishMany",
+                    data: data
+                });
+            },
             getImage: function(data) {
                 return $http({
                     method: 'post',
                     url: "/api/getlink/getImage",
+                    data: data
+                });
+            },
+            getImageManyLink: function(data) {
+                return $http({
+                    method: 'post',
+                    url: "/api/getlink/getImageManyLink",
                     data: data
                 });
             },

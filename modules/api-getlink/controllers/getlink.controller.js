@@ -44,7 +44,7 @@ function getHost(url) {
     }
 }
 
-var not_allow_link = [".css", ".jpeg", ".jpg", ".png", ".js", ".ico"];
+var not_allow_link = [".css", ".jpeg", ".jpg", ".png", ".js", ".ico", ".xml", ".php"];
 
 function handleReg(text) {
     return text.split("").map(function(char) {
@@ -120,19 +120,42 @@ exports.publish = {
     }
 };
 
-
-exports.getImage = {
+exports.publishMany = {
     handler: function(request, reply) {
-        Wreck.get(request.payload.url, (err, res, payload) => {
-            if (err) {
-                console.log("err", err);
-                return reply({
-                    status: false,
-                    msg: "Error!"
+        let { contents, email } = request.payload;
+        // console.log("html", html);
+        // setup email data with unicode symbols
+
+        let parallel = [];
+        _.map(contents, function(item) {
+            parallel.push(function(cb) {
+                let { image, title } = item;
+                let mailOptions = {
+                    from: 'namduong.kh94@gmail.com', // sender address
+                    to: email, // list of receivers
+                    subject: title, // Subject line
+                    html: image // html body
+                };
+                transporter.sendMail(mailOptions, (error, info) => {
+                    if (error) {
+                        return console.log(error);
+                    }
+                    console.log('Message %s sent: %s', info.messageId, info.response);
                 });
-            } else {
-                // console.log("Payload", payload.toString('utf8'));
-                let html = payload.toString('utf8');
+                cb(null, "Success!");
+            });
+        });
+
+        async.parallel(parallel, function(err, results) {
+            return reply("Sent!");
+        });
+    }
+};
+
+function _getImage(url) {
+    return new Promise(function(rs, rj) {
+        getHtml(url)
+            .then(function(html) {
                 let img = "";
                 let title;
                 html.replace(/<title>([^"]+)<\/title>/g, function(str, s1) {
@@ -149,14 +172,71 @@ exports.getImage = {
                         return str;
                     });
                 // console.log("HTML", img);
+                if (!img) {
+                    return rj();
+                }
+                return rs({
+                    image: img,
+                    title: _.upperFirst(title.replace("Truyện Hentai Mau 9x", ""))
+                });
+            })
+            .catch(function(err) {
+                console.log("err", err);
+                return rj(err);
+            });
+    });
+}
+
+exports.getImage = {
+    handler: function(request, reply) {
+        _getImage(request.payload.url)
+            .then(function(result) {
                 return reply({
                     status: true,
-                    content: {
-                        image: img,
-                        title: _.upperFirst(title)
+                    content: result
+                });
+            })
+            .catch(function(err) {
+                console.log("err", err);
+                return reply({
+                    status: false
+                });
+            });
+    }
+};
+
+exports.getImageManyLink = {
+    handler: function(request, reply) {
+        let { list_url } = request.payload;
+        if (list_url && list_url.length) {
+            let parallel = [];
+            _.map(list_url, function(url) {
+                parallel.push(function(next) {
+                    _getImage(url)
+                        .then(function(result) {
+                            next(null, result);
+                        })
+                        .catch(function(err) {
+                            console.log("err", err);
+                            next(err);
+                        });
+                });
+            });
+            async.parallel(parallel, function(err, results) {
+                results = _.filter(results, function(item) {
+                    if (item) {
+                        return item;
                     }
                 });
-            }
-        });
+                return reply({
+                    status: true,
+                    contents: results
+                });
+            });
+        } else {
+            return reply({
+                status: false
+            });
+        }
     }
 };

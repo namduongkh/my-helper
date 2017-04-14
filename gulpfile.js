@@ -7,6 +7,7 @@ var sass = require('gulp-sass');
 var cleanCSS = require('gulp-clean-css');
 var concatCss = require('gulp-concat-css');
 var minify = require('gulp-minify');
+const babel = require('gulp-babel');
 
 gulp.task('nodemon', () => {
     nodemon({
@@ -23,6 +24,9 @@ gulp.task('nodemon', () => {
 gulp.task('js', function() {
     return gulp.src(['public/js/*.js', 'modules/*/views/js/config.js', 'modules/*/views/js/*.js'])
         .pipe(concat('main.js'))
+        .pipe(babel({
+            presets: ['es2015']
+        }))
         .pipe(browserify())
         .pipe(minify())
         .pipe(gulp.dest('./public/dist'))

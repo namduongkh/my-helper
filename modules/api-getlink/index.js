@@ -17,11 +17,22 @@ exports.register = function(server, options, next) {
         config: Controller.publish
     });
 
+    server.route({
+        method: 'POST',
+        path: '/api/getlink/publishMany',
+        config: Controller.publishMany
+    });
 
     server.route({
         method: 'POST',
         path: '/api/getlink/getImage',
         config: Controller.getImage
+    });
+
+    server.route({
+        method: 'POST',
+        path: '/api/getlink/getImageManyLink',
+        config: Controller.getImageManyLink
     });
 
     next();

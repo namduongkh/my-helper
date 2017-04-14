@@ -1,4 +1,4 @@
-<div id="index" ng-controller="GetLinkController as getLink" ng-init="getLink.view_data = '{{json view_data}}'">
+<div id="index" ng-controller="GetLinkController as getLink" ng-init="getLink.view_data = {{json view_data}};">
     <div class="row">
         <div class="col-md-12">
             <div class="form-group">
@@ -14,48 +14,89 @@
             </div>
         </div>
         <div class="col-md-12" ng-if="getLink.allHref">
+            <div class="form-group text-right">
+                <button type="button" class="btn btn-success" ng-click="getLink.getImageManyLink(getLink.listLink, getLink.openGetImageManyLinkModal)">Get image many link</button>
+            </div>
             <table class="table table-striped table-bordered">
                 <tr>
-                    <th>Select</th>
+                    <th class="text-center">
+                        <input type="checkbox" ng-model="getLink.checkAllLink" ng-change="getLink.checkAll()">
+                    </th>
                     <th>Href</th>
                     <th>Action</th>
                 </tr>
                 <tr ng-repeat="href in getLink.allHref track by $index">
-                    <td>
-                        <input type="checkbox" ng-model="getLink.selectHref" />
+                    <td class="text-center">
+                        <input class="select-link-{[{$index}]}" type="checkbox" ng-model="getLink.selectLink[$index]" ng-change="getLink.changeListLink($index, href)" />
                     </td>
                     <td>
                         <a href="{[{href}]}" target="_blank">{[{href}]}</a>
                     </td>
                     <td>
-                        <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#openGetImage" ng-click="getLink.getImage(href)">Get image from link</button>
+                        <button type="button" class="btn btn-success btn-sm" ng-click="getLink.openGetImage(href, getLink.openGetImageModal)">Get image from link</button>
                     </td>
                 </tr>
             </table>
         </div>
-        <div class="modal fade" id="openGetImage" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">Get image from link</h4>
-                    </div>
-                    <div class="modal-body html-content">
-                        <div class="form-group">
-                            <label for="">Title</label>
-                            <input class="form-control" placeholder="Title" type="text" name="url" ng-model="getLink.image_data.title" />
+        <div ng-controller="GetImageController as getImage">
+            <div class="modal fade" id="openGetImage" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">Get image from link</h4>
                         </div>
-                        <div id="html-result">
-                            <div ng-bind-html="getLink.image_data.html"></div>
-                            <div class="clear-fix"></div>
+                        <div class="modal-body html-content">
+                            <div class="form-group">
+                                <label for="">Title</label>
+                                <input class="form-control" placeholder="Title" type="text" name="url" ng-model="getImage.image_data.title" />
+                            </div>
+                            <div id="html-result">
+                                <div ng-bind-html="getImage.image_data.html"></div>
+                                <div class="clear-fix"></div>
+                            </div>
+                        </div>
+                        <div class="modal-footer form-inline">
+                            <label for="">Publish email: </label>
+                            <select ng-model="getImage.image_data.publish_email" class="form-control" ng-options="item.value as item.name for item in getImage.publish_email">
+                            </select>
+                            <button type="button" class="btn btn-primary" ng-click="getImage.publish(getImage.image_data.image, getImage.image_data.publish_email, getImage.image_data.title)">Publish</button>
+                            <button type="button" class="btn btn-default close-modal" data-dismiss="modal">Close</button>
                         </div>
                     </div>
-                    <div class="modal-footer form-inline">
-                        <label for="">Publish email: </label>
-                        <select ng-model="getLink.image_data.publish_email" class="form-control" ng-options="item.value as item.name for item in getLink.publish_email">
-                        </select>
-                        <button type="button" class="btn btn-primary" ng-click="getLink.publish(getLink.image_data.image,getLink.image_data.publish_email, getLink.image_data.title)">Publish</button>
-                        <button type="button" class="btn btn-default close-modal" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+            <div class="modal fade" id="openGetImageManyLink" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">Get image from many link</h4>
+                        </div>
+                        <div class="modal-body html-content">
+                            <div class="panel-group" id="accordion">
+                                <div class="panel panel-default" ng-repeat="item in getImage.imageManyLink track by $index">
+                                    <div class="panel-heading">
+                                        <div class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse{[{$index}]}">{[{item.title}]} (<span ng-click="getImage.removeFromListLink($index)">Remove</span>)</a>
+                                        </div>
+                                    </div>
+                                    <div id="collapse{[{$index}]}" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <div class="image-many-link" ng-bind-html="item.html"></div>
+                                            <div class="clear-fix"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer form-inline">
+                            <label for="">Publish email: </label>
+                            <select ng-model="getImage.select_publish_email" class="form-control" ng-options="item.value as item.name for item in getImage.publish_email">
+                            </select>
+                            <button type="button" class="btn btn-primary" ng-click="getImage.publishMany(getImage.imageManyLink, getImage.select_publish_email)">Publish</button>
+                            <button type="button" class="btn btn-default close-modal" data-dismiss="modal">Close</button>
+                        </div>
                     </div>
                 </div>
             </div>
