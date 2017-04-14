@@ -4,7 +4,7 @@
     angular.module("GetLink")
         .controller("GetLinkController", GetLinkController);
 
-    function GetLinkController($scope, $http, $sce, $timeout, CommonSvc) {
+    function GetLinkController($scope, $http, $sce, $timeout, CommonSvc, GetLinkSvc, toastr) {
         var getLink = this;
         getLink.publish_email = CommonSvc.publish_email;
 
@@ -19,12 +19,9 @@
         });
 
         getLink.getAllLink = function() {
-            $http({
-                    method: 'post',
-                    url: "/api/getlink/getAllLink",
-                    data: {
-                        url: getLink.url
-                    }
+            GetLinkSvc.getAllLink({
+                    url: getLink.url,
+                    not_allow: getLink.not_allow
                 })
                 .then(function(resp) {
                     if (resp.status == 200) {
@@ -34,18 +31,15 @@
                     }
                 })
                 .catch(function(err) {
-                    console.log(err)
+                    console.log("Err", err);
+                    toastr.error('Get all link error!', 'Error!');
                 });
         };
 
         getLink.getImage = function(url) {
             getLink.image_data = {};
-            $http({
-                    method: 'post',
-                    url: "/getImage",
-                    data: {
-                        url: url
-                    }
+            GetLinkSvc.getImage({
+                    url: url
                 })
                 .then(function(resp) {
                     if (resp.status == 200) {
@@ -63,24 +57,26 @@
                             });
                         }
                     }
+                })
+                .catch(function() {
+                    toastr.error('Get image error!', 'Error!');
                 });
         };
 
         getLink.publish = function(html, email, title) {
-            $http({
-                    method: 'post',
-                    url: "/api/getlink/publish",
-                    data: {
-                        html: html,
-                        email: email,
-                        title: title
-                    }
+            GetLinkSvc.publish({
+                    html: html,
+                    email: email,
+                    title: title
                 })
                 .then(function(resp) {
                     if (resp.status == 200) {
-                        alert("Success!");
+                        toastr.success('Publish success!', 'Success!');
                         $('.close-modal').click();
                     }
+                })
+                .catch(function() {
+                    toastr.error('Publish error!', 'Error!');
                 });
         };
     }

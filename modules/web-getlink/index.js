@@ -7,13 +7,7 @@ exports.register = function(server, options, next) {
 
     server.route({
         method: 'GET',
-        path: '/',
-        config: Controller.index
-    });
-
-    server.route({
-        method: 'POST',
-        path: '/getImage',
+        path: '/get-image',
         config: Controller.getImage
     });
 
@@ -39,5 +33,5 @@ exports.register = function(server, options, next) {
 };
 
 exports.register.attributes = {
-    name: 'web-geturl',
+    name: 'web-getlink',
 }

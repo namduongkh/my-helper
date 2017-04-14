@@ -5,16 +5,12 @@
         .module("GetUrl")
         .controller("GetUrlController", GetUrlController);
 
-    function GetUrlController($http, $sce, $timeout) {
+    function GetUrlController($http, $sce, $timeout, GetLinkSvc) {
         var getUrl = this;
         getUrl.showHtml = false;
         getUrl.getImage = function() {
-            $http({
-                    method: 'post',
-                    url: "/getImage",
-                    data: {
-                        url: getUrl.url
-                    }
+            GetLinkSvc.getImage({
+                    url: getUrl.url
                 })
                 .then(function(resp) {
                     if (resp.status == 200) {

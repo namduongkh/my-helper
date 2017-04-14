@@ -3,7 +3,7 @@
     'use strict';
 
     angular
-        .module("app", ["GetUrl", "Jackpot", "ngclipboard", "GetLink", "Common"])
+        .module("app", ["GetUrl", "Jackpot", "ngclipboard", "GetLink", "Common", "toastr", "angular-loading-bar"])
         .config(function($interpolateProvider) {
             $interpolateProvider.startSymbol('{[{');
             $interpolateProvider.endSymbol('}]}');
@@ -66,7 +66,7 @@
     angular.module("GetLink")
         .controller("GetLinkController", GetLinkController);
 
-    function GetLinkController($scope, $http, $sce, $timeout, CommonSvc) {
+    function GetLinkController($scope, $http, $sce, $timeout, CommonSvc, GetLinkSvc, toastr) {
         var getLink = this;
         getLink.publish_email = CommonSvc.publish_email;
 
@@ -81,12 +81,9 @@
         });
 
         getLink.getAllLink = function() {
-            $http({
-                    method: 'post',
-                    url: "/api/getlink/getAllLink",
-                    data: {
-                        url: getLink.url
-                    }
+            GetLinkSvc.getAllLink({
+                    url: getLink.url,
+                    not_allow: getLink.not_allow
                 })
                 .then(function(resp) {
                     if (resp.status == 200) {
@@ -96,18 +93,15 @@
                     }
                 })
                 .catch(function(err) {
-                    console.log(err)
+                    console.log("Err", err);
+                    toastr.error('Get all link error!', 'Error!');
                 });
         };
 
         getLink.getImage = function(url) {
             getLink.image_data = {};
-            $http({
-                    method: 'post',
-                    url: "/getImage",
-                    data: {
-                        url: url
-                    }
+            GetLinkSvc.getImage({
+                    url: url
                 })
                 .then(function(resp) {
                     if (resp.status == 200) {
@@ -125,24 +119,26 @@
                             });
                         }
                     }
+                })
+                .catch(function() {
+                    toastr.error('Get image error!', 'Error!');
                 });
         };
 
         getLink.publish = function(html, email, title) {
-            $http({
-                    method: 'post',
-                    url: "/api/getlink/publish",
-                    data: {
-                        html: html,
-                        email: email,
-                        title: title
-                    }
+            GetLinkSvc.publish({
+                    html: html,
+                    email: email,
+                    title: title
                 })
                 .then(function(resp) {
                     if (resp.status == 200) {
-                        alert("Success!");
+                        toastr.success('Publish success!', 'Success!');
                         $('.close-modal').click();
                     }
+                })
+                .catch(function() {
+                    toastr.error('Publish error!', 'Error!');
                 });
         };
     }
@@ -154,16 +150,12 @@
         .module("GetUrl")
         .controller("GetUrlController", GetUrlController);
 
-    function GetUrlController($http, $sce, $timeout) {
+    function GetUrlController($http, $sce, $timeout, GetLinkSvc) {
         var getUrl = this;
         getUrl.showHtml = false;
         getUrl.getImage = function() {
-            $http({
-                    method: 'post',
-                    url: "/getImage",
-                    data: {
-                        url: getUrl.url
-                    }
+            GetLinkSvc.getImage({
+                    url: getUrl.url
                 })
                 .then(function(resp) {
                     if (resp.status == 200) {
@@ -215,6 +207,38 @@
 //         console.log("Doc", doc);
 //     });
 // });
+(function() {
+    'use strict';
+
+    angular.module("GetLink")
+        .service("GetLinkSvc", GetLinkSvc);
+
+    function GetLinkSvc($http) {
+        return {
+            publish: function(data) {
+                return $http({
+                    method: 'post',
+                    url: "/api/getlink/publish",
+                    data: data
+                });
+            },
+            getImage: function(data) {
+                return $http({
+                    method: 'post',
+                    url: "/api/getlink/getImage",
+                    data: data
+                });
+            },
+            getAllLink: function(data) {
+                return $http({
+                    method: 'post',
+                    url: "/api/getlink/getAllLink",
+                    data: data
+                });
+            }
+        }
+    }
+})();
 (function() {
     'use strict';
 

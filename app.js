@@ -19,6 +19,8 @@ var assets = {
         // '/template/js/plugins/morris/morris-data.js',
         '/libs/clipboard/dist/clipboard.min.js',
         '/libs/ngclipboard/dist/ngclipboard.min.js',
+        '/libs/angular-toastr/dist/angular-toastr.tpls.js',
+        '/libs/angular-loading-bar/build/loading-bar.min.js',
         '/dist/main.js',
     ],
     css: [
@@ -27,6 +29,8 @@ var assets = {
         '/template/css/sb-admin.css',
         // '/template/css/plugins/morris.css',
         '/template/font-awesome/css/font-awesome.min.css',
+        '/libs/angular-toastr/dist/angular-toastr.css',
+        '/libs/angular-loading-bar/build/loading-bar.min.css',
     ]
 }
 

@@ -42,64 +42,24 @@ exports.publish = {
     }
 };
 
-exports.index = {
+exports.getImage = {
     handler: function(request, reply) {
-        return reply.view("web-geturl/views/index", { meta: { title: 'Index' }, active_menu: 'geturl' });
+        return reply.view("web-getlink/views/get-image", { meta: { title: 'Get image from link' }, active_menu: 'getimage' });
     }
 };
 
 exports.testIframe = {
     handler: function(request, reply) {
-        return reply.view("web-geturl/views/test-iframe", { meta: { title: 'Test iframe' }, active_menu: 'testiframe' });
+        return reply.view("web-getlink/views/test-iframe", { meta: { title: 'Test iframe' }, active_menu: 'testiframe' });
     }
 };
 
 exports.getLink = {
     handler: function(request, reply) {
-        return reply.view("web-geturl/views/get-link", {
+        return reply.view("web-getlink/views/get-link", {
             meta: { title: 'Get link' },
             active_menu: 'getlink',
             view_data: Object.assign({}, request.query)
-        });
-    }
-};
-
-exports.getImage = {
-    handler: function(request, reply) {
-        Wreck.get(request.payload.url, (err, res, payload) => {
-            if (err) {
-                console.log("err", err);
-                return reply({
-                    status: false,
-                    msg: "Error!"
-                });
-            } else {
-                // console.log("Payload", payload.toString('utf8'));
-                let html = payload.toString('utf8');
-                let img = "";
-                let title;
-                html.replace(/<title>([^"]+)<\/title>/g, function(str, s1) {
-                        title = s1;
-                        return str;
-                    })
-                    .replace(/<img[^>]*src="([^"]+)"[^>]*>/g, function(str, s1) {
-                        if ((s1.search('.jpg') > -1 ||
-                                s1.search('.png') > -1 ||
-                                s1.search('.jpeg') > -1) &&
-                            s1.search('http') > -1) {
-                            img += "<img src=" + s1 + " alt='Hình ảnh'/>";
-                        }
-                        return str;
-                    });
-                // console.log("HTML", img);
-                return reply({
-                    status: true,
-                    content: {
-                        image: img,
-                        title: _.upperFirst(title)
-                    }
-                });
-            }
         });
     }
 };

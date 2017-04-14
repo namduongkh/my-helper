@@ -3,11 +3,12 @@
     padding: 0;
 }
 
-.get-image {
-    text-align: center;
+#html-result {
     img {
-        max-width: 80%;
-        height: auto;
+        max-width: 24%;
+        border: 1px solid red;
+        margin: 2px;
+        float: left;
     }
 }
 
@@ -18,9 +19,6 @@
     #html-result {
         img {
             max-width: 32%;
-            border: 1px solid red;
-            margin: 2px;
-            float: left;
         }
     }
 }

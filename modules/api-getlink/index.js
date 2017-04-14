@@ -1,6 +1,6 @@
 'use strict';
 
-const Controller = require("./controllers/index.controller.js");
+const Controller = require("./controllers/getlink.controller.js");
 const path = require('path');
 
 exports.register = function(server, options, next) {
@@ -15,6 +15,13 @@ exports.register = function(server, options, next) {
         method: 'POST',
         path: '/api/getlink/publish',
         config: Controller.publish
+    });
+
+
+    server.route({
+        method: 'POST',
+        path: '/api/getlink/getImage',
+        config: Controller.getImage
     });
 
     next();
