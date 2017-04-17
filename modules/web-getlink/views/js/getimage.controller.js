@@ -31,7 +31,6 @@
                     if (resp.status == 200) {
                         if (resp.data.content) {
                             getImage.image_data = {
-                                image: resp.data.content.image,
                                 title: resp.data.content.title,
                                 html: $sce.trustAsHtml(resp.data.content.image),
                                 publish_email: getImage.publish_email[0].value
@@ -98,7 +97,16 @@
                 });
         };
 
+        getImage.getHtmlImage = function(selector) {
+            if (selector) {
+                return $(selector).html();
+            }
+            return null;
+        };
+
         getImage.publish = function(html, email, title) {
+            // console.log("Html", html);
+            // return;
             GetLinkSvc.publish({
                     html: html,
                     email: email,

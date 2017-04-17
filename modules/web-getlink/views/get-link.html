@@ -52,7 +52,7 @@
                                 <input class="form-control" placeholder="Title" type="text" name="url" ng-model="getImage.image_data.title" />
                             </div>
                             <div id="html-result">
-                                <div ng-bind-html="getImage.image_data.html"></div>
+                                <div ng-bind-html="getImage.image_data.html" id="image-html"></div>
                                 <div class="clear-fix"></div>
                             </div>
                         </div>
@@ -60,7 +60,7 @@
                             <label for="">Publish email: </label>
                             <select ng-model="getImage.image_data.publish_email" class="form-control" ng-options="item.value as item.name for item in getImage.publish_email">
                             </select>
-                            <button type="button" class="btn btn-primary" ng-click="getImage.publish(getImage.image_data.image, getImage.image_data.publish_email, getImage.image_data.title)">Publish</button>
+                            <button type="button" class="btn btn-primary" ng-click="getImage.publish(getImage.getHtmlImage('#image-html'), getImage.image_data.publish_email, getImage.image_data.title)">Publish</button>
                             <button type="button" class="btn btn-default close-modal" data-dismiss="modal">Close</button>
                         </div>
                     </div>

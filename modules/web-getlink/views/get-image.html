@@ -23,10 +23,10 @@
                     <label for="">Publish email: </label>
                     <select ng-model="getImage.image_data.publish_email" class="form-control" ng-options="item.value as item.name for item in getImage.publish_email">
                     </select>
-                    <button ng-disabled="getImage.has_publish" type="button" ng-click="getImage.publish(getImage.image_data.image, getImage.image_data.publish_email, getImage.image_data.title)" class="btn btn-primary" ng-if="getImage.image_data.html">Publish</button>
+                    <button ng-disabled="getImage.has_publish" type="button" ng-click="getImage.publish(getImage.getHtmlImage('#image-html'), getImage.image_data.publish_email, getImage.image_data.title)" class="btn btn-primary" ng-if="getImage.image_data.html">Publish</button>
                 </div>
             </div>
-            <div class="get-image" ng-bind-html="getImage.image_data.html" ng-if="!getImage.showHtml"></div>
+            <div class="get-image" ng-bind-html="getImage.image_data.html" ng-if="!getImage.showHtml" id="image-html"></div>
             <div class="get-image" ng-bind="getImage.image_data.html" ng-if="getImage.showHtml" id="get-image-html"></div>
         </div>
     </div>
