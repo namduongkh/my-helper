@@ -24,6 +24,7 @@ function getHtml(url) {
             } else {
                 let html = payload.toString('utf8')
                     .replace(/\n/g, "")
+                    // .replace(/\s/g, " ")
                     .replace(/>[\s]*</g, "><");
                 // console.log("Html", html);
                 rs(html);
@@ -216,7 +217,7 @@ exports.getContent = {
                 let content = "";
                 let title;
                 html
-                    .replace(/<script((?!<script>).)*<\/script>/g, function(str) {
+                    .replace(/<script((?!<script).)*<\/script>/g, function(str) {
                         return "";
                     })
                     .replace(/onclick="[^"]+"/g, "")

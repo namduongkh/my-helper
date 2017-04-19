@@ -59,11 +59,11 @@
         $scope.$watch('getContent.view_data', function (value) {
             if (value) {
                 // value = JSON.parse(value);
+                if (value.selector) {
+                    getContent.form.selector = value.selector;
+                }
                 if (value.url) {
                     getContent.form.url = value.url;
-                    if (value.selector) {
-                        getContent.form.selector = value.selector;
-                    }
                     getContent.getContent(true, value.url, value.selector);
                 }
             }
@@ -83,9 +83,11 @@
                     if (resp.data.status) {
                         var html_tmp = document.createElement("div");
                         var select = $(html_tmp).html(resp.data.content);
+                        // console.log("Select", select.find(selector));
                         if (selector) {
                             select = select.find(selector);
                         }
+                        // console.log("Select", select, select.innerHTML);
                         getContent.content_data = {
                             title: resp.data.title,
                             html: $sce.trustAsHtml(select.html()),

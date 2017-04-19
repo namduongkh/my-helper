@@ -35,8 +35,8 @@
                 </div>
             </div>
             <div class="get-image" ng-bind-html="getContent.content_data.html" ng-if="!getContent.showHtml" id="content-result"></div>
-            <div class="get-image">
-                <textarea rows="20">
+            <div class="get-image" ng-if="getContent.showHtml">
+                <textarea rows="20" style="width:100%">
                     {[{getContent.content_data.html}]}
                 </textarea>
             </div>
