@@ -21,19 +21,19 @@ gulp.task('nodemon', () => {
 // process JS files and return the stream.
 // js in client
 gulp.task('js', function() {
-    return gulp.src(['public/js/*.js', 'modules/*/views/js/config.js', 'modules/*/views/js/*.js'])
+    return gulp.src(['public/assets/js/*.js', 'app/modules/*/views/js/config.js', 'app/modules/*/views/js/*.js'])
         .pipe(concat('main.js'))
         .pipe(browserify())
         .pipe(minify())
-        .pipe(gulp.dest('./public/dist'))
+        .pipe(gulp.dest('./public/assets/js'))
 });
 
 gulp.task('sass', function() {
-    return gulp.src("modules/*/views/css/*.scss")
+    return gulp.src("app/modules/*/views/css/*.scss")
         .pipe(sass())
         .pipe(concatCss("main.css"))
         .pipe(cleanCSS())
-        .pipe(gulp.dest("./public/dist"))
+        .pipe(gulp.dest("./public/assets/css"))
         .pipe(browserSync.stream());
 });
 
@@ -71,7 +71,7 @@ gulp.task('browser-sync', ['nodemon'], function() {
 });
 
 gulp.task('default', ['nodemon', 'browser-sync', 'sass', 'js'], function() {
-    gulp.watch('modules/*/views/css/*.scss', ['sass']);
-    gulp.watch(['public/js/*.js', 'modules/*/views/js/config.js', 'modules/*/views/js/*.js'], ['js']);
-    gulp.watch(['layouts/**/*.html', 'modules/**/*.html']).on('change', browserSync.reload);
+    gulp.watch('app/modules/*/views/css/*.scss', ['sass']);
+    gulp.watch(['public/assets/js/*.js', 'app/modules/*/views/js/config.js', 'app/modules/*/views/js/*.js'], ['js']);
+    gulp.watch(['app/views/layouts/**/*.html', 'app/modules/**/*.html']).on('change', browserSync.reload);
 });
