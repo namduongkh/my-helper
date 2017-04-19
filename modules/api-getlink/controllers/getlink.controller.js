@@ -11,7 +11,7 @@ const nodemailer = require('nodemailer');
 let transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: 'namduong.kh94@gmail.com',
+        user: 'openness.sender.email@gmail.com',
         pass: 'phongnguyen.94'
     }
 });
@@ -107,7 +107,7 @@ exports.publish = {
         // console.log("html", html);
         // setup email data with unicode symbols
         let mailOptions = {
-            from: 'namduong.kh94@gmail.com', // sender address
+            from: 'openness.sender.email@gmail.com', // sender address
             to: email, // list of receivers
             subject: title, // Subject line
             html: html // html body
@@ -116,12 +116,14 @@ exports.publish = {
         // send mail with defined transport object
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
-                return console.log(error);
+                console.log(error);
+                return reply({ status: false });
+            } else {
+                console.log('Message %s sent: %s', info.messageId, info.response);
+                return reply({ status: true });
             }
-            console.log('Message %s sent: %s', info.messageId, info.response);
         });
 
-        return reply("Send!");
     }
 };
 

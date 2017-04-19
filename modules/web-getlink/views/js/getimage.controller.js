@@ -114,8 +114,12 @@
                 })
                 .then(function(resp) {
                     if (resp.status == 200) {
-                        toastr.success('Publish success!', 'Success!');
-                        $('.close-modal').click();
+                        if (resp.data.status) {
+                            toastr.success('Publish success!', 'Success!');
+                            $('.close-modal').click();
+                        } else {
+                            toastr.error('Publish error!', 'Error!');
+                        }
                     }
                     getImage.has_publish = true;
                 })

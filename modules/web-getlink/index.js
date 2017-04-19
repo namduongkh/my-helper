@@ -23,11 +23,11 @@ exports.register = function(server, options, next) {
         config: Controller.testIframe
     });
 
-    server.route({
-        method: 'POST',
-        path: '/api/publish',
-        config: Controller.publish
-    });
+    // server.route({
+    //     method: 'POST',
+    //     path: '/api/publish',
+    //     config: Controller.publish
+    // });
 
     server.route({
         method: 'GET',
