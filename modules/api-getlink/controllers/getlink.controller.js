@@ -138,7 +138,7 @@ exports.publishMany = {
             parallel.push(function(cb) {
                 let { image, title } = item;
                 let mailOptions = {
-                    from: 'namduong.kh94@gmail.com', // sender address
+                    from: 'openness.sender.email@gmail.com', // sender address
                     to: email, // list of receivers
                     subject: title, // Subject line
                     html: image // html body
