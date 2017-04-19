@@ -54,7 +54,7 @@ server.register(Vision, (err) => {
             html: require('handlebars'),
         },
         helpersPath: global.BASE_PATH + '/helpers',
-        context: { assets: assets },
+        // context: { assets: assets },
         relativeTo: global.BASE_PATH + '/modules',
         partialsPath: global.BASE_PATH + '/layouts/partials',
         layoutPath: global.BASE_PATH + '/layouts',

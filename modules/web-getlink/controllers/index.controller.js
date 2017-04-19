@@ -74,6 +74,16 @@ exports.getLink = {
     }
 };
 
+exports.getContent = {
+    handler: function(request, reply) {
+        return reply.view("web-getlink/views/get-content", {
+            meta: { title: 'Get content' },
+            active_menu: 'getcontent',
+            view_data: Object.assign({}, request.query)
+        });
+    }
+};
+
 // exports.convertWinning = {
 //     handler: function(request, reply) {
 //         let winnings = require("./winning.json");

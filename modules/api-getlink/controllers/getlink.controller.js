@@ -6,6 +6,7 @@ var fs = require('fs');
 const mongoose = require('mongoose');
 const Winning = mongoose.model('Winning');
 const nodemailer = require('nodemailer');
+
 // create reusable transporter object using the default SMTP transport
 let transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -21,7 +22,10 @@ function getHtml(url) {
             if (err) {
                 rj(err);
             } else {
-                let html = payload.toString('utf8').replace(/\n/g, "");
+                let html = payload.toString('utf8')
+                    .replace(/\n/g, "")
+                    .replace(/>[\s]*</g, "><");
+                // console.log("Html", html);
                 rs(html);
             }
         });
@@ -194,6 +198,46 @@ exports.getImage = {
                 return reply({
                     status: true,
                     content: result
+                });
+            })
+            .catch(function(err) {
+                console.log("err", err);
+                return reply({
+                    status: false
+                });
+            });
+    }
+};
+
+exports.getContent = {
+    handler: function(request, reply) {
+        getHtml(request.payload.url)
+            .then(function(html) {
+                let content = "";
+                let title;
+                html
+                    .replace(/<script((?!<script>).)*<\/script>/g, function(str) {
+                        return "";
+                    })
+                    .replace(/onclick="[^"]+"/g, "")
+                    .replace(/<title>([^"]+)<\/title>/g, function(str, s1) {
+                        title = s1;
+                        return str;
+                    })
+                    .replace(/<body.*>([^]+)<\/body>/g, function(str, s1) {
+                        content = s1;
+                        return str;
+                    });
+                // console.log("HTML", img);
+                if (!content) {
+                    return reply({
+                        status: false
+                    });
+                }
+                return reply({
+                    status: true,
+                    title: _.upperFirst(title),
+                    content: content
                 });
             })
             .catch(function(err) {

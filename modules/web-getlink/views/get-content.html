@@ -1,0 +1,45 @@
+<div id="index" ng-controller="GetContentController as getContent" ng-init="getContent.view_data = {{json view_data}}">
+    <div class="row">
+        <div class="col-sm-12">
+            <form action="#" name="getContentForm" id="getContentForm">
+                <div class="form-group">
+                    <label for="url">Url</label>
+                    <input id="url" required type="text" name="url" data-ng-model="getContent.form.url" class="form-control" placeholder="http://example.com" />
+                    <div class="text-danger" ng-if="!getContentForm.url.$valid && !getContentForm.$pristine">Invalid</div>
+                </div>
+                <div class="form-group">
+                    <label for="url">Content selector</label>
+                    <input id="selector" type="text" name="selector" data-ng-model="getContent.form.selector" class="form-control" placeholder="#content, .content..." />
+                    <div class="text-danger" ng-if="!getContentForm.selector.$valid && !getContentForm.$pristine">Invalid</div>
+                </div>
+                <div class="form-group">
+                    <button type="button" ng-click="getContent.getContent(getContentForm.$valid, getContent.form.url, getContent.form.selector)" class="btn btn-primary">Get content</button>
+                    <button type="button" ng-click="getContent.changeShowHtml()" class="btn btn-primary" ng-if="getContent.content_data.html">Show html: {[{getContent.showHtml}]}</button>
+                    <button type="button" ngclipboard data-clipboard-target="#get-image-html" class="btn btn-primary" ng-if="getContent.showHtml">Copy html</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row" ng-if="getContent.content_data.html">
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label for="url">Tiêu đề:</label>
+                <input type="text" class="form-control" ng-model="getContent.content_data.title">
+            </div>
+            <div class="form-group">
+                <div class="form-inline">
+                    <label for="">Publish email: </label>
+                    <select ng-model="getContent.content_data.publish_email" class="form-control" ng-options="item.value as item.name for item in getContent.publish_email">
+                    </select>
+                    <button ng-disabled="getContent.has_publish" type="button" ng-click="getContent.publish(getContent.getHtmlImage('#image-html'), getContent.content_data.publish_email, getContent.content_data.title)" class="btn btn-primary" ng-if="getContent.content_data.html">Publish</button>
+                </div>
+            </div>
+            <div class="get-image" ng-bind-html="getContent.content_data.html" ng-if="!getContent.showHtml" id="content-result"></div>
+            <div class="get-image">
+                <textarea rows="20">
+                    {[{getContent.content_data.html}]}
+                </textarea>
+            </div>
+        </div>
+    </div>
+</div>
