@@ -3,41 +3,60 @@
 
     angular
         .module("GetLink")
-        .controller("GetImageController", GetImageController);
+        .controller("GetContentController", GetContentController);
 
-    function GetImageController($http, $scope, $rootScope, $sce, $timeout, GetLinkSvc, CommonSvc, toastr) {
-        var getImage = this;
-        getImage.showHtml = false;
-        getImage.publish_email = CommonSvc.publish_email;
-        getImage.has_publish = false;
+    function GetContentController($http, $scope, $rootScope, $sce, $timeout, GetLinkSvc, CommonSvc, toastr) {
+        var getContent = this;
+        getContent.showHtml = false;
+        getContent.publish_email = CommonSvc.publish_email;
+        getContent.has_publish = false;
+        getContent.form = {};
 
-        $scope.$watch('getImage.view_data', function(value) {
+        $scope.$watch('getContent.view_data', function(value) {
             if (value) {
                 // value = JSON.parse(value);
+                if (value.selector) {
+                    getContent.form.selector = value.selector;
+                }
                 if (value.url) {
-                    getImage.url = value.url;
-                    getImage.getImage(value.url);
+                    getContent.form.url = value.url;
+                    getContent.getContent(true, value.url, value.selector);
                 }
             }
         });
 
-        getImage.getImage = function(url, cb) {
-            getImage.has_publish = false;
-            getImage.image_data = {};
-            GetLinkSvc.getImage({
+        getContent.getContent = function(valid, url, selector, cb) {
+            if (!valid) {
+                toastr.error("Form không đủ dữ liệu", "Lỗi!");
+                return;
+            }
+            getContent.has_publish = false;
+            getContent.content_data = {};
+            GetLinkSvc.getContent({
                     url: url
                 })
                 .then(function(resp) {
                     if (resp.status == 200) {
-                        if (resp.data.content) {
-                            getImage.image_data = {
-                                title: resp.data.content.title,
-                                html: $sce.trustAsHtml(resp.data.content.image),
-                                publish_email: getImage.publish_email[0].value
+                        if (resp.data.status) {
+                            var html_tmp = document.createElement("div");
+                            let select = $(html_tmp).html(resp.data.content);
+                            // console.log("Select", select.find(selector));
+                            if (selector) {
+                                select = select.find(selector);
+                            }
+                            // console.log("Select", select, select.innerHTML);
+                            getContent.content_data = {
+                                title: resp.data.title,
+                                html: $sce.trustAsHtml(select.html()),
+                                publish_email: getContent.publish_email[0].value
                             };
                             $timeout(function() {
-                                $("#html-result").find('img').bind('click', function() {
-                                    this.remove();
+                                $("#content-result").find("div").on("click", function() {
+                                    console.log("Clicked!", $(this).find("div"));
+                                    let children = $(this).find("div");
+                                    if (!children.length) {
+                                        this.remove();
+                                    }
                                 });
                             });
                             if (cb) {
@@ -56,31 +75,31 @@
                 });
         };
 
-        getImage.getImageManyLink = function(list_url, cb) {
-            // getImage.has_publish = false;
-            getImage.select_publish_email = getImage.publish_email[0].value;
-            GetLinkSvc.getImageManyLink({
+        getContent.getContentManyLink = function(list_url, cb) {
+            // getContent.has_publish = false;
+            getContent.select_publish_email = getContent.publish_email[0].value;
+            GetLinkSvc.getContentManyLink({
                     list_url
                 })
                 .then(function(resp) {
                     if (resp.status == 200) {
                         if (resp.data.contents) {
-                            getImage.imageManyLink = resp.data.contents.map(function(item) {
+                            getContent.imageManyLink = resp.data.contents.map(function(item) {
                                 item.html = $sce.trustAsHtml(item.image);
                                 return item;
                             });
                             $timeout(function() {
                                 $(".image-many-link").find('img').bind('click', function() {
                                     this.remove();
-                                    // for (var i in getImage.imageManyLink) {
-                                    //     if (!getImage.imageManyLink[i].html) {
-                                    //         getImage.imageManyLink.splice(i, 1);
+                                    // for (var i in getContent.imageManyLink) {
+                                    //     if (!getContent.imageManyLink[i].html) {
+                                    //         getContent.imageManyLink.splice(i, 1);
                                     //         break;
                                     //     }
                                     // }
                                 });
                             });
-                            // console.log(getImage.imageManyLink);
+                            // console.log(getContent.imageManyLink);
                             if (cb) {
                                 cb();
                             }
@@ -97,14 +116,14 @@
                 });
         };
 
-        getImage.getHtmlImage = function(selector) {
+        getContent.getHtmlImage = function(selector) {
             if (selector) {
-                return "<!--more-->" + $(selector).html();
+                return $(selector).html();
             }
             return null;
         };
 
-        getImage.publish = function(html, email, title) {
+        getContent.publish = function(html, email, title) {
             // console.log("Html", html);
             // return;
             GetLinkSvc.publish({
@@ -114,23 +133,19 @@
                 })
                 .then(function(resp) {
                     if (resp.status == 200) {
-                        if (resp.data.status) {
-                            toastr.success('Publish success!', 'Success!');
-                            $('.close-modal').click();
-                        } else {
-                            toastr.error('Publish error!', 'Error!');
-                        }
+                        toastr.success('Publish success!', 'Success!');
+                        $('.close-modal').click();
                     }
-                    getImage.has_publish = true;
+                    getContent.has_publish = true;
                 })
                 .catch(function() {
                     toastr.error('Publish error!', 'Error!');
                 });
         };
 
-        getImage.publishMany = function(list_contents, email) {
+        getContent.publishMany = function(list_contents, email) {
             list_contents = list_contents.map(function(item) {
-                item.image = "<!--more-->" + item.html.$$unwrapTrustedValue();
+                delete item.html;
                 return item;
             })
             GetLinkSvc.publishMany({
@@ -142,21 +157,21 @@
                         toastr.success("Đã xuất bản", 'Thành công!');
                         $('.close-modal').click();
                     }
-                    // getImage.has_publish = true;
+                    // getContent.has_publish = true;
                 })
                 .catch(function() {
                     toastr.error('Publish error!', 'Error!');
                 });
         };
 
-        getImage.changeShowHtml = function() {
-            getImage.showHtml = !getImage.showHtml;
+        getContent.changeShowHtml = function() {
+            getContent.showHtml = !getContent.showHtml;
         };
 
         $rootScope.$on("GET_IMAGE_FROM_LINK", function(e, data) {
             var { url, cb } = data;
             if (url) {
-                getImage.getImage(url, cb);
+                getContent.getContent(url, cb);
             } else {
                 toastr.error('Không tìm thấy url!', 'Lỗi!');
             }
@@ -165,15 +180,15 @@
         $rootScope.$on("GET_IMAGE_FROM_MANY_LINK", function(e, data) {
             var { list_url, cb } = data;
             if (list_url) {
-                getImage.getImageManyLink(list_url, cb);
+                getContent.getContentManyLink(list_url, cb);
             } else {
                 toastr.error('Không tìm thấy url!', 'Lỗi!');
             }
         });
 
-        getImage.removeFromListLink = function(index) {
-            getImage.imageManyLink.splice(index, 1);
-            if (!getImage.imageManyLink.length) {
+        getContent.removeFromListLink = function(index) {
+            getContent.imageManyLink.splice(index, 1);
+            if (!getContent.imageManyLink.length) {
                 $('.close-modal').click();
             }
         };

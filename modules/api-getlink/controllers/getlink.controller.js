@@ -6,11 +6,12 @@ var fs = require('fs');
 const mongoose = require('mongoose');
 const Winning = mongoose.model('Winning');
 const nodemailer = require('nodemailer');
+
 // create reusable transporter object using the default SMTP transport
 let transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: 'namduong.kh94@gmail.com',
+        user: 'openness.sender.email@gmail.com',
         pass: 'phongnguyen.94'
     }
 });
@@ -21,7 +22,11 @@ function getHtml(url) {
             if (err) {
                 rj(err);
             } else {
-                let html = payload.toString('utf8').replace(/\n/g, "");
+                let html = payload.toString('utf8')
+                    .replace(/\n/g, "")
+                    // .replace(/\s/g, " ")
+                    .replace(/>[\s]*</g, "><");
+                // console.log("Html", html);
                 rs(html);
             }
         });
@@ -102,7 +107,7 @@ exports.publish = {
         // console.log("html", html);
         // setup email data with unicode symbols
         let mailOptions = {
-            from: 'namduong.kh94@gmail.com', // sender address
+            from: 'openness.sender.email@gmail.com', // sender address
             to: email, // list of receivers
             subject: title, // Subject line
             html: html // html body
@@ -111,12 +116,14 @@ exports.publish = {
         // send mail with defined transport object
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
-                return console.log(error);
+                console.log(error);
+                return reply({ status: false });
+            } else {
+                console.log('Message %s sent: %s', info.messageId, info.response);
+                return reply({ status: true });
             }
-            console.log('Message %s sent: %s', info.messageId, info.response);
         });
 
-        return reply("Send!");
     }
 };
 
@@ -195,6 +202,46 @@ exports.getImage = {
                 return reply({
                     status: true,
                     content: result
+                });
+            })
+            .catch(function(err) {
+                console.log("err", err);
+                return reply({
+                    status: false
+                });
+            });
+    }
+};
+
+exports.getContent = {
+    handler: function(request, reply) {
+        getHtml(request.payload.url)
+            .then(function(html) {
+                let content = "";
+                let title;
+                html
+                    .replace(/<script((?!<script).)*<\/script>/g, function(str) {
+                        return "";
+                    })
+                    .replace(/onclick="[^"]+"/g, "")
+                    .replace(/<title>([^"]+)<\/title>/g, function(str, s1) {
+                        title = s1;
+                        return str;
+                    })
+                    .replace(/<body.*>([^]+)<\/body>/g, function(str, s1) {
+                        content = s1;
+                        return str;
+                    });
+                // console.log("HTML", img);
+                if (!content) {
+                    return reply({
+                        status: false
+                    });
+                }
+                return reply({
+                    status: true,
+                    title: _.upperFirst(title),
+                    content: content
                 });
             })
             .catch(function(err) {

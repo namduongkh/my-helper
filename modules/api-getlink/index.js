@@ -31,6 +31,12 @@ exports.register = function(server, options, next) {
 
     server.route({
         method: 'POST',
+        path: '/api/getlink/getContent',
+        config: Controller.getContent
+    });
+
+    server.route({
+        method: 'POST',
         path: '/api/getlink/getImageManyLink',
         config: Controller.getImageManyLink
     });

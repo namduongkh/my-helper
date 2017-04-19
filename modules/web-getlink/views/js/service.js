@@ -27,6 +27,13 @@
                     data: data
                 });
             },
+            getContent: function(data) {
+                return $http({
+                    method: 'post',
+                    url: "/api/getlink/getContent",
+                    data: data
+                });
+            },
             getImageManyLink: function(data) {
                 return $http({
                     method: 'post',
