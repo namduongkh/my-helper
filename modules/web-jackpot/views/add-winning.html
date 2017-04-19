@@ -1,0 +1,17 @@
+<div id="jackpot" ng-controller="JackpotController as jackpot">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="number">Số</label>
+                <input type="text" class="form-control" ng-model="jackpot.add_winning.number" placeholder="Số" />
+            </div>
+            <div class="form-group">
+                <label for="number">Ngày</label>
+                <input type="date" class="form-control" ng-model="jackpot.add_winning.date" placeholder="Ngày" />
+            </div>
+            <div class="form-group">
+                <button type="button" ng-click="jackpot.addWinning()" class="btn btn-success">Thêm</button>
+            </div>
+        </div>
+    </div>
+</div>

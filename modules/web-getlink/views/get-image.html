@@ -1,0 +1,33 @@
+<div id="index" ng-controller="GetImageController as getImage" ng-init="getImage.view_data = {{json view_data}}">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label for="url">Url</label>
+                <input type="text" name="url" data-ng-model="getImage.url" class="form-control" placeholder="http://example.com" />
+            </div>
+            <div class="form-group">
+                <button type="button" ng-click="getImage.getImage(getImage.url)" class="btn btn-primary">Get image</button>
+                <button type="button" ng-click="getImage.changeShowHtml()" class="btn btn-primary" ng-if="getImage.image_data.html">Show html: {[{getImage.showHtml}]}</button>
+                <button type="button" ngclipboard data-clipboard-target="#get-image-html" class="btn btn-primary" ng-if="getImage.showHtml">Copy html</button>
+            </div>
+        </div>
+    </div>
+    <div class="row" ng-if="getImage.image_data.html">
+        <div class="col-sm-12" id="html-result">
+            <div class="form-group">
+                <label for="url">Tiêu đề:</label>
+                <input type="text" class="form-control" ng-model="getImage.image_data.title">
+            </div>
+            <div class="form-group">
+                <div class="form-inline">
+                    <label for="">Publish email: </label>
+                    <select ng-model="getImage.image_data.publish_email" class="form-control" ng-options="item.value as item.name for item in getImage.publish_email">
+                    </select>
+                    <button ng-disabled="getImage.has_publish" type="button" ng-click="getImage.publish(getImage.getHtmlImage('#image-html'), getImage.image_data.publish_email, getImage.image_data.title)" class="btn btn-primary" ng-if="getImage.image_data.html">Publish</button>
+                </div>
+            </div>
+            <div class="get-image" ng-bind-html="getImage.image_data.html" ng-if="!getImage.showHtml" id="image-html"></div>
+            <div class="get-image" ng-bind="getImage.image_data.html" ng-if="getImage.showHtml" id="get-image-html"></div>
+        </div>
+    </div>
+</div>

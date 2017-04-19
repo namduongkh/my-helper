@@ -1,0 +1,28 @@
+.winning-item {
+    float: left;
+    background: #ccc;
+    margin: 3px;
+    width: 35px;
+    height: 35px;
+    text-align: center;
+    line-height: 35px;
+    border-radius: 100%;
+    position: relative;
+    font-size: 20px;
+    .diff {
+        font-size: 10px;
+        position: absolute;
+        color: #fff;
+        top: -5px;
+        right: -5px;
+        background: red;
+        border-radius: 100%;
+        width: 16px;
+        height: 16px;
+        line-height: 15px;
+    }
+}
+
+.clear-fix {
+    clear: both;
+}
