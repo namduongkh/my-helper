@@ -138,15 +138,16 @@ exports.publishMany = {
                 };
                 transporter.sendMail(mailOptions, (error, info) => {
                     if (error) {
-                        return console.log(error);
+                        console.log(error);
+                    } else {
+                        console.log('Message %s sent: %s', info.messageId, info.response);
                     }
-                    console.log('Message %s sent: %s', info.messageId, info.response);
+                    cb(null, "Success!");
                 });
-                cb(null, "Success!");
             });
         });
 
-        async.parallel(parallel, function(err, results) {
+        async.series(parallel, function(err, results) {
             return reply("Sent!");
         });
     }

@@ -99,7 +99,7 @@
 
         getImage.getHtmlImage = function(selector) {
             if (selector) {
-                return $(selector).html();
+                return "<!--more-->" + $(selector).html();
             }
             return null;
         };
@@ -126,7 +126,7 @@
 
         getImage.publishMany = function(list_contents, email) {
             list_contents = list_contents.map(function(item) {
-                delete item.html;
+                item.image = "<!--more-->" + item.html.$$unwrapTrustedValue();
                 return item;
             })
             GetLinkSvc.publishMany({
