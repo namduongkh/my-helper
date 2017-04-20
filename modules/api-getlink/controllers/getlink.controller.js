@@ -175,7 +175,7 @@ function _getImage(url) {
                                 s1.search('.png') > -1 ||
                                 s1.search('.jpeg') > -1) &&
                             s1.search('http') > -1) {
-                            img += "<img src=" + s1 + " alt='Hình ảnh'/>";
+                            img += "<img src=" + s1 + " alt='Blog 18 tuổi'/>";
                         }
                         return str;
                     });
