@@ -31,13 +31,13 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="name">Tên bài</label>
-                    <input class="form-control" type="text" name="name" id="name" ng-model="graph.publish_data.name" />
-                </div>
-                <div class="form-group">
                     <label for="choose_feed">Bài đã lưu</label>
                     <select class="form-control" id="choose_feed" name="choose_feed" ng-model="graph.choose_feed" ng-options="item as item.name for item in graph.feeds" ng-change="graph.changeFeed(graph.choose_feed)">
                     </select>
+                </div>
+                <div class="form-group">
+                    <label for="name">Tên bài</label>
+                    <input class="form-control" type="text" name="name" id="name" ng-model="graph.publish_data.name" />
                 </div>
                 <div class="form-group">
                     <label for="message">Bài đăng</label>

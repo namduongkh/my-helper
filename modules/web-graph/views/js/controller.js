@@ -132,6 +132,7 @@
         graph.changeFeed = function(feed) {
             console.log(feed);
             if (feed) {
+                graph.publish_data.name = feed.name;
                 graph.publish_data.message = feed.message;
                 graph.publish_data.link = feed.link;
             }
