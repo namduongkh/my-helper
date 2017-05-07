@@ -89,7 +89,9 @@ exports.addFeed = {
                     for (var i in user.feeds) {
                         var item = user.feeds[i];
                         if (item.message == message && item.link == link) {
-                            return reply(user.feeds);
+                            item.name = name;
+                            // return reply(user.feeds);
+                            return user.save();
                         }
                     }
                 }
