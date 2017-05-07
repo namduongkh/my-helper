@@ -135,7 +135,7 @@
                 graph.publish_data.name = feed.name;
                 graph.publish_data.message = feed.message;
                 graph.publish_data.link = feed.link;
-                graph.publish_data.feed_id = feed.feed_id;
+                graph.publish_data.feed_id = feed._id;
             }
         };
     }
