@@ -8,7 +8,7 @@
         $interpolateProvider.startSymbol('{[{');
         $interpolateProvider.endSymbol('}]}');
 
-        $facebookProvider.setAppId('297670284021666');
+        $facebookProvider.setAppId(window.fb_app_id);
         $facebookProvider.setPermissions("email,publish_actions,user_managed_groups");
     }).run(function ($window) {
         (function () {

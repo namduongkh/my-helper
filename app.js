@@ -65,7 +65,8 @@ server.register(Vision, (err) => {
             assets: assets,
             meta: {
                 title: 'Helper'
-            }
+            },
+            fb_app_id: process.env && process.env.NODE_ENV == 'staging' ? "1904421699840070" : "297670284021666"
         }
     });
 });
