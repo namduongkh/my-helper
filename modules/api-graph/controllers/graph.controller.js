@@ -72,7 +72,7 @@ exports.addGroup = {
 
 exports.addFeed = {
     handler: function(request, reply) {
-        let { fb_id, message, link, name } = request.payload;
+        let { fb_id, message, link, name, feed_id } = request.payload;
         UserFacebook.findOne({
                 fb_id: fb_id,
             })
@@ -88,8 +88,10 @@ exports.addFeed = {
                 } else {
                     for (var i in user.feeds) {
                         var item = user.feeds[i];
-                        if (item.message == message && item.link == link) {
+                        if (item._id.toString() == feed_id) {
                             item.name = name;
+                            item.message = message;
+                            item.link = link;
                             // return reply(user.feeds);
                             return user.save();
                         }

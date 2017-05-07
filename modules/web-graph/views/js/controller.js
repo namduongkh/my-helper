@@ -86,17 +86,9 @@
                     });
             }
             if (is_save) {
-                GraphSvc.addFeed({
-                        fb_id: graph.userInfo.id,
-                        message: graph.publish_data.message,
-                        link: graph.publish_data.link,
-                        name: graph.publish_data.name
-                    })
-                    .then(function(resp) {
-                        toastr.success("Thành công", "Thông báo");
-                        graph.feeds = resp.data;
-                        publishFeed();
-                    });
+                _saveFeed(function() {
+                    publishFeed();
+                });
             } else {
                 publishFeed();
             }
@@ -116,25 +108,34 @@
         };
 
         graph.saveFeed = function() {
+            _saveFeed();
+        };
+
+        function _saveFeed(cb) {
             GraphSvc.addFeed({
                     fb_id: graph.userInfo.id,
                     message: graph.publish_data.message,
                     link: graph.publish_data.link,
-                    name: graph.publish_data.name
+                    name: graph.publish_data.name,
+                    feed_id: graph.publish_data.feed_id
                 })
                 .then(function(resp) {
                     toastr.success("Thành công", "Thông báo");
                     graph.feeds = resp.data;
                     // publishFeed();
+                    if (cb) {
+                        cb();
+                    }
                 });
-        };
+        }
 
         graph.changeFeed = function(feed) {
-            console.log(feed);
+            // console.log(feed);
             if (feed) {
                 graph.publish_data.name = feed.name;
                 graph.publish_data.message = feed.message;
                 graph.publish_data.link = feed.link;
+                graph.publish_data.feed_id = feed.feed_id;
             }
         };
     }
