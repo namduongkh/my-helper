@@ -21,6 +21,8 @@ var assets = {
         '/libs/ngclipboard/dist/ngclipboard.min.js',
         '/libs/angular-toastr/dist/angular-toastr.tpls.js',
         '/libs/angular-loading-bar/build/loading-bar.min.js',
+        // 'http://connect.facebook.net/en_US/all.js',
+        '/libs/ng-facebook/ngFacebook.js',
         '/dist/main.js',
     ],
     css: [
