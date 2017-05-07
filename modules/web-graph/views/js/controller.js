@@ -8,6 +8,7 @@
         var graph = this;
         graph.loading = true;
         graph.groups = [];
+        graph.publish_data = {};
 
         graph.getUserInfo = function() {
             graph.userInfo = null;
@@ -88,7 +89,8 @@
                 GraphSvc.addFeed({
                         fb_id: graph.userInfo.id,
                         message: graph.publish_data.message,
-                        link: graph.publish_data.link
+                        link: graph.publish_data.link,
+                        name: graph.publish_data.name
                     })
                     .then(function(resp) {
                         toastr.success("Thành công", "Thông báo");
@@ -113,7 +115,22 @@
                 });
         };
 
+        graph.saveFeed = function() {
+            GraphSvc.addFeed({
+                    fb_id: graph.userInfo.id,
+                    message: graph.publish_data.message,
+                    link: graph.publish_data.link,
+                    name: graph.publish_data.name
+                })
+                .then(function(resp) {
+                    toastr.success("Thành công", "Thông báo");
+                    graph.feeds = resp.data;
+                    // publishFeed();
+                });
+        };
+
         graph.changeFeed = function(feed) {
+            console.log(feed);
             if (feed) {
                 graph.publish_data.message = feed.message;
                 graph.publish_data.link = feed.link;

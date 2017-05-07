@@ -72,7 +72,7 @@ exports.addGroup = {
 
 exports.addFeed = {
     handler: function(request, reply) {
-        let { fb_id, message, link } = request.payload;
+        let { fb_id, message, link, name } = request.payload;
         UserFacebook.findOne({
                 fb_id: fb_id,
             })
@@ -94,6 +94,7 @@ exports.addFeed = {
                     }
                 }
                 user.feeds.push({
+                    name: name,
                     message: message,
                     link: link
                 });

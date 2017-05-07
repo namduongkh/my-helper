@@ -17,6 +17,9 @@ const winningSchema = new Schema({
         }
     }],
     feeds: [{
+        name: {
+            type: String
+        },
         message: {
             type: String
         },
