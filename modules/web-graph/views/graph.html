@@ -10,29 +10,18 @@
     </div>
     <div class="row" ng-if="graph.userInfo">
         <div class="col-md-12">
-            <form>
-                <div class="form-group">
-                    <label for="group_id">Id nhóm</label>
-                    <input class="form-control" type="text" name="group_id" id="group_id" ng-model="graph.group_id" ng-change="graph.groupInfo(graph.group_id)" />
-                </div>
-                <div class="form-group">
-                    <label for="group_name">Tên nhóm</label>
-                    <input class="form-control" type="text" name="group_name" id="group_name" ng-model="graph.group_name" disabled/>
-                </div>
-                <div class="form-group">
-                    <button type="button" class="btn btn-primary" ng-click="graph.addGroup()">Thêm nhóm</button>
-                </div>
-            </form>
-            <hr/>
             <form id="PublishForm" name="PublishForm">
+                <h3>Xuất bản bài đăng</h3>
                 <div class="form-group">
                     <label for="group_id">Nhóm</label>
                     <select class="form-control" id="group_id" name="group_id" required ng-model="graph.publish_data.group_id" ng-options="item.id as item.name for item in graph.groups">
+                        <option value="">-- Chọn nhóm</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="choose_feed">Bài đã lưu</label>
                     <select class="form-control" id="choose_feed" name="choose_feed" ng-model="graph.choose_feed" ng-options="item as item.name for item in graph.feeds" ng-change="graph.changeFeed(graph.choose_feed)">
+                        <option value="">-- Chọn bài</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -40,20 +29,38 @@
                 </div>
                 <div class="form-group">
                     <label for="name">Tên bài</label>
-                    <input class="form-control" type="text" name="name" id="name" ng-model="graph.publish_data.name" />
+                    <input placeholder="Tên bài" class="form-control" type="text" name="name" id="name" ng-model="graph.publish_data.name" />
                 </div>
                 <div class="form-group">
                     <label for="message">Bài đăng</label>
-                    <textarea class="form-control" id="message" name="message" rows="10" ng-model="graph.publish_data.message" required></textarea>
+                    <textarea class="form-control publish-message" id="message" name="message" rows="8" ng-model="graph.publish_data.message" required></textarea>
+                    <div class="emoji-area">
+                        <a title="{[{graph.emojiCode(item)}]}" class="emoji-item" href="javascript:void(0)" ng-repeat="item in graph.emoji track by $index" ng-click="graph.selectEmoji(graph.emojiCode(item))">{[{graph.emojiCode(item, $last)}]}</a>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="link">Link</label>
-                    <input class="form-control" type="text" name="link" id="link" ng-model="graph.publish_data.link" />
+                    <input placeholder="Link chia sẻ" class="form-control" type="text" name="link" id="link" ng-model="graph.publish_data.link" />
                 </div>
                 <div class="form-group">
                     <button type="button" class="btn btn-primary" ng-click="graph.publishing(PublishForm.$valid, false)">Xuất bản</button>
                     <button type="button" class="btn btn-primary" ng-click="graph.publishing(PublishForm.$valid, true)">Lưu và xuất bản</button>
                     <button type="button" class="btn btn-primary" ng-click="graph.saveFeed()">Lưu</button>
+                </div>
+            </form>
+            <hr/>
+            <form>
+                <h3>Thêm nhóm</h3>
+                <div class="form-group">
+                    <label for="group_id">Id nhóm</label>
+                    <input placeholder="Id nhóm" class="form-control" type="text" name="group_id" id="group_id" ng-model="graph.group_id" ng-change="graph.groupInfo(graph.group_id)" />
+                </div>
+                <div class="form-group">
+                    <label for="group_name">Tên nhóm</label>
+                    <input placeholder="Tên nhóm" class="form-control" type="text" name="group_name" id="group_name" ng-model="graph.group_name" disabled/>
+                </div>
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary" ng-click="graph.addGroup()">Thêm nhóm</button>
                 </div>
             </form>
         </div>

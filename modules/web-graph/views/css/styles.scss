@@ -173,3 +173,10 @@
         -moz-transform: scale(0.5, 1);
     }
 }
+
+.emoji-area {
+    height: 100px;
+    overflow: hidden;
+    overflow-y: scroll;
+    border: 1px solid #555;
+}

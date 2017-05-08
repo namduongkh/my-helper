@@ -88,7 +88,7 @@ exports.addFeed = {
                 } else {
                     for (var i in user.feeds) {
                         var item = user.feeds[i];
-                        if (item._id.toString() == feed_id) {
+                        if (item && item._id.toString() == feed_id) {
                             item.name = name;
                             item.message = message;
                             item.link = link;

@@ -3,7 +3,7 @@
 
     angular
         .module("app", ["Jackpot", "ngclipboard", "GetLink", "Common", "toastr", "angular-loading-bar",
-            "Graph", "ngFacebook"
+            "Graph", "ngFacebook", 'ngSanitize'
         ])
         .config(function($interpolateProvider, $facebookProvider) {
             $interpolateProvider.startSymbol('{[{');
