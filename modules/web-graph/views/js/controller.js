@@ -83,7 +83,7 @@
                         console.log("resp", response);
                         if (response && !response.error) {
                             /* handle the result */
-                            toastr.error("Xuất bản thành công!", "Thành công!");
+                            toastr.success("Xuất bản thành công!", "Thành công!");
                         } else {
                             toastr.error("Có lỗi xảy ra", "Lỗi");
                         }
